@@ -26,7 +26,6 @@ let package = Package(
         .target(
             name: "SwiftfulLoggingFirebaseCrashlytics",
             dependencies: [
-                // Adding SwiftfulLogging as a dependency for this target
                 .product(name: "SwiftfulLogging", package: "SwiftfulLogging"),
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk")
             ]
