@@ -36,10 +36,10 @@ public struct FirebaseCrashlyticsService: LogService {
         Crashlytics.crashlytics().setUserID(userId)
         
         if let name {
-            Crashlytics.crashlytics().setCustomValue("user_name", forKey: name)
+            Crashlytics.crashlytics().setCustomValue("account_name", forKey: name)
         }
         if let email {
-            Crashlytics.crashlytics().setCustomValue("user_name", forKey: email)
+            Crashlytics.crashlytics().setCustomValue("account_email", forKey: email)
         }
     }
 
