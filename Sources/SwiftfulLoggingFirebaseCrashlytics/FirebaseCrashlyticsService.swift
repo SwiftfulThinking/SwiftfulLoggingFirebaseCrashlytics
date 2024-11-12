@@ -2,7 +2,6 @@ import Foundation
 import FirebaseCrashlytics
 import FirebaseCrashlyticsSwift
 import SwiftfulLogging
-import SendableDictionary
 
 public struct FirebaseCrashlyticsService: LogService {
     
@@ -43,12 +42,12 @@ public struct FirebaseCrashlyticsService: LogService {
         }
     }
 
-    public func addUserProperties(dict: SendableDict, isHighPriority: Bool) {
+    public func addUserProperties(dict: [String: Any], isHighPriority: Bool) {
         // Firebase Crashlytics allows up to 64  key/value pairs
         // https://firebase.google.com/docs/crashlytics/customize-crash-reports?platform=ios
         
         guard isHighPriority else { return }
-        for attribute in dict.dict {
+        for attribute in dict {
             Crashlytics.crashlytics().setCustomValue(attribute.value, forKey: attribute.key)
         }
     }
