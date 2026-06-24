@@ -10,21 +10,19 @@ public struct FirebaseCrashlyticsService: LogService {
     }
 
     public func trackEvent(event: LoggableEvent) {
-        // Note: Firebase Analytics automatically log breadcrumbs to Crashlytics
-        // Therefore, no need to send typical events herein
-        // https://firebase.google.com/docs/crashlytics/customize-crash-reports?hl=en&authuser=1&_gl=1*ntknz4*_ga*MTg3MDE4MjY5OC4xNzE3ODAzNTUw*_ga_CW55HF8NVT*MTcyOTg2MDMwNS42My4xLjE3Mjk4NjA2MTcuMjQuMC4w&platform=ios#get-breadcrumb-logs
-        
-        switch event.type {
-        case .info, .analytic, .warning:
-            break
-        case .severe:
-            let error = NSError(
-                domain: event.eventName,
-                code: event.eventName.stableHashValue,
-                userInfo: event.parameters
-            )
-            Crashlytics.crashlytics().record(error: error, userInfo: event.parameters)
-        }
+        // Records the event as a non-fatal error. Type routing is handled by the
+        // caller (LogManager only forwards a service its allowed types — typically
+        // just `.severe`), so this service no longer filters by type itself.
+        //
+        // Note: Firebase Analytics automatically logs breadcrumbs to Crashlytics,
+        // so non-severe events don't need to be sent here.
+        // https://firebase.google.com/docs/crashlytics/customize-crash-reports?platform=ios#get-breadcrumb-logs
+        let error = NSError(
+            domain: event.eventName,
+            code: event.eventName.stableHashValue,
+            userInfo: event.parameters
+        )
+        Crashlytics.crashlytics().record(error: error, userInfo: event.parameters)
     }
 
     public func trackScreenView(event: any LoggableEvent) {
