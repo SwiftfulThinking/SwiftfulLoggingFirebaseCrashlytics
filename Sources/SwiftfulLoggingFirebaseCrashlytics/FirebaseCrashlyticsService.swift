@@ -41,10 +41,11 @@ public struct FirebaseCrashlyticsService: LogService {
     }
 
     public func addUserProperties(dict: [String: Any], isHighPriority: Bool) {
-        // Firebase Crashlytics allows up to 64  key/value pairs
+        // Sets every received custom key/value. Firebase Crashlytics allows up to
+        // 64 pairs, so callers should route only high-priority properties here
+        // (LogManager handles that); this service no longer filters by
+        // isHighPriority itself.
         // https://firebase.google.com/docs/crashlytics/customize-crash-reports?platform=ios
-        
-        guard isHighPriority else { return }
         for attribute in dict {
             Crashlytics.crashlytics().setCustomValue(attribute.value, forKey: attribute.key)
         }
